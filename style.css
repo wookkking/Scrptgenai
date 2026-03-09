@@ -1,40 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap');
-
 :root {
-    --background-dark: #111015;
-    --background-darker: #0D0C10;
-    --primary: #8c25f4;
+    --primary: #6d28d9; /* Deep purple */
+    --background-dark: #111827; /* Very dark blue-gray */
+    --background-darker: #0d1117; /* Even darker, almost black */
 }
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-.font-sans {
-    font-family: 'Manrope', sans-serif;
-}
-
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+/* For Webkit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+::-webkit-scrollbar-track {
+    background: var(--background-dark);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 2px solid var(--background-dark);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+::-webkit-scrollbar-thumb:hover {
+    background-color: #8b5cf6; /* Lighter purple */
 }
