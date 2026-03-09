@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
         saveSettingsBtn: document.getElementById('saveSettingsBtn'),
         settingsSaveMsg: document.getElementById('settingsSaveMsg'),
     };
-    const initialResultHTML = elements.resultContent.innerHTML;
 
     // ==================================================================================
     // 3. 상태 관리 (State Management)
@@ -113,6 +112,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateAllButtonStyles();
             });
         });
+
+        // 복사 버튼 이벤트 위임
+        elements.resultContent.addEventListener('click', (event) => {
+            const copyBtn = event.target.closest('.copy-btn');
+            if (copyBtn) {
+                const contentToCopy = copyBtn.closest('.result-card').querySelector('.result-card-content').textContent;
+                navigator.clipboard.writeText(contentToCopy).then(() => {
+                    copyBtn.textContent = '복사 완료!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = '복사';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('복사 실패:', err);
+                    alert('클립보드 복사에 실패했습니다.');
+                });
+            }
+        });
     }
 
     // ==================================================================================
@@ -137,10 +155,30 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             const tone = getSelectedOption('tone');
             const platform = getSelectedOption('platform');
-            const script = `--- 생성된 대본 ---\n주제: ${topic}\n톤앤매너: ${tone}\n플랫폼: ${platform}\n\n(여기에 AI가 생성한 스크립트가 표시됩니다.)`;
-            renderResults(script);
+            
+            // 더미 데이터 구조 변경
+            const generatedContent = {
+                '훅 (Hook) - 3가지': [
+                    `1. ${topic}에 대해 아무도 말해주지 않는 진실. 충격주의! `,
+                    `2. 이 영상을 보고 ${topic}에 대한 생각이 180도 바뀌었습니다. `,
+                    `3. 단 30초만 투자하세요. ${topic} 전문가가 되는 가장 빠른 방법.`
+                ].join('\n'),
+                '30초 대본 (예상 소요 시간: 30초)': `(오프닝 음악과 함께 화면 전환)\n안녕하세요! 오늘은 모두가 궁금해하는 '${topic}'에 대해 이야기해볼게요. (핵심 내용 1 설명)... (핵심 내용 2 설명)... (마무리 멘트와 함께 다음 영상 예고)`,
+                '자막용 문장 (5개)': [
+                    `* ${topic}, 이것만 알면 끝?`,
+                    `* 충격적인 ${topic}의 실체`,
+                    `* 전문가도 놀란 ${topic} 비법`,
+                    `* 지금 바로 확인해야 할 ${topic} 트렌드`,
+                    `* 당신만 모르고 있던 ${topic} 이야기`
+                ].join('\n'),
+                '캡션': `#${topic.replace(/\s/g, ''')} #${platform}꿀팁 #추천 #fyp #viral`,
+                '댓글 유도 문장': `여러분이 알고 있는 ${topic}에 대한 다른 꿀팁이 있다면 댓글로 알려주세요! 👇`
+            };
+
+            renderResults(generatedContent);
+
             state.usage.dailyGenerations++;
-            addHistoryItem({ topic, tone, platform, script, createdAt: new Date().toISOString() });
+            addHistoryItem({ topic, tone, platform, script: generatedContent, createdAt: new Date().toISOString() });
             updateUsageDisplay();
         }, 1000);
     }
@@ -205,8 +243,22 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.resultContent.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-primary animate-pulse"><span class="material-symbols-outlined text-6xl">auto_awesome</span><p class="mt-4 text-lg font-bold">AI가 대본을 생성하고 있습니다.</p></div>`;
     }
 
-    function renderResults(script) {
-        elements.resultContent.innerHTML = `<div class="p-6"><pre class="whitespace-pre-wrap font-sans">${script}</pre></div>`;
+    function renderResults(content) {
+        elements.resultContent.innerHTML = ''; // Clear previous results
+        elements.resultContent.classList.add('grid', 'grid-cols-1', 'md:grid-cols-2', 'gap-4', 'p-4');
+
+        for (const [title, text] of Object.entries(content)) {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+                <div class="result-card-header">
+                    <h3 class="result-card-title">${title}</h3>
+                    <button class="copy-btn">복사</button>
+                </div>
+                <pre class="result-card-content">${text}</pre>
+            `;
+            elements.resultContent.appendChild(card);
+        }
     }
 
     function renderHistoryList() { /* Implementation needed */ }

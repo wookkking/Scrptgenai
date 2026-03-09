@@ -1,7 +1,7 @@
 :root {
-    --primary: #6d28d9; /* Deep purple */
-    --background-dark: #111827; /* Very dark blue-gray */
-    --background-darker: #0d1117; /* Even darker, almost black */
+    --background-darker: #0D0C10;
+    --background-dark: #111015;
+    --primary: #8c25f4;
 }
 
 body {
@@ -9,28 +9,84 @@ body {
 }
 
 .material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 
-/* For Webkit-based browsers (Chrome, Safari) */
+/* 스크롤바 스타일 (선택적) */
 ::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-    background: var(--background-dark);
+  background: var(--background-darker);
 }
-
 ::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
-    border-radius: 10px;
-    border: 2px solid var(--background-dark);
+  background: #2d2d3a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a4a;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: #8b5cf6; /* Lighter purple */
+/* 결과 섹션 카드 스타일 */
+.result-card {
+    background-color: var(--background-dark);
+    border: 1px solid rgba(140, 37, 244, 0.2);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    box-shadow: 0 0 20px rgba(140, 37, 244, 0.1);
+    transform: translateY(-2px);
+}
+
+.result-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(140, 37, 244, 0.1);
+}
+
+.result-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #e2d2f9;
+}
+
+.result-card-content {
+    padding: 16px;
+    white-space: pre-wrap;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #d1d5db; /* Tailwind의 gray-300 */
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.copy-btn {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background-color: rgba(140, 37, 244, 0.1);
+}
+
+.copy-btn.copied {
+    background-color: #22c55e; /* Tailwind의 green-500 */
+    color: white;
+    border-color: #22c55e;
 }
